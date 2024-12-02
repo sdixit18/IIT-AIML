@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+
+# Flask specific
+instance/
+.webassets-cache
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+
+
+# IDE-specific files
+.idea/
+.vscode/
+
+# System-specific files
+.DS_Store
+Thumbs.db

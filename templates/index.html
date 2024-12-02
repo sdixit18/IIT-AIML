@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel File</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <!-- Add xlsx.js to read Excel -->
+</head>
+
+<body>
+    <h1>Upload Excel File</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <hr>
+    <h2>Don't have a file? Download the template:</h2>
+    <a href="/download-template">
+        <button type="button">Download Template</button>
+    </a>
+
+    <script>
+        // Handle file input
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const file = document.getElementById('fileInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const data = e.target.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+
+                    // Convert Excel data to JSON
+                    const jsonData = {};
+                    workbook.SheetNames.forEach(sheetName => {
+                        const sheet = workbook.Sheets[sheetName];
+                        jsonData[sheetName] = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    });
+
+                    // Store the JSON data in local storage
+                    localStorage.setItem('excelData', JSON.stringify(jsonData));
+
+                    // Redirect to display page
+                    window.location.href = "/display";
+                };
+
+                reader.readAsBinaryString(file);
+            }
+        });
+    </script>
+</body>
+
+</html>
